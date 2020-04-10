@@ -1,74 +1,87 @@
 # Dynamic motd
 
-The aim of this project is to give some informations when you log into a server through SSH.
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
+
+The aim of this project is to give users useful information on the system, when logging into a server via SSH.
 
 Example:
 
 ```
+        _,met$$$$$gg.                                                           
+     ,g$$$$$$$$$$$$$$$P.                                                        
+   ,g$$P""       """Y$$.".                                                      
+  ,$$P'              `$$$.                                                      
+',$$P       ,ggs.     `$$b:                                                     
+`d$$'     ,$P"'   .    $$$                               ,#.                    
+ $$P      d$'     ,    $$P      ##:          :##        :###:                   
+ $$:      $$.   -    ,d$$'      ##'          `##         `#'                    
+ $$;      Y$b._   _,d$P'    __  ##     __     ##  __      _     __          _   
+ Y$$.    `.`"Y$$$$P"'     ,####:##  ,######.  ##.#####. :### ,######. ###.####: 
+ `$$b      "-.__         ,##' `###  ##:  :##  ###' `###  ##' #:   `## `###' `##:
+  `Y$$b                  ##    `##  ##    ##  ##'   `##  ##    ___,##  ##:   `##
+   `Y$$.                 ##     ##  #######:  ##     ##  ##  .#######  ##'    ##
+     `$$b.               ##     ##  ##'       ##     ##  ##  ##'  `##  ##     ##
+       `Y$$b.            ##.   ,##  ##        ##    ,##  ##  ##    ##  ##     ##
+         `"Y$b._         :#:._,###  ##:__,##  ##:__,##' ,##. ##.__:##. ##     ##
+             `""""       `:#### ###  ######'  `######'  #### `#####"## ##     ##
 
-   ___  ___ _ ____   _____ _ __
-  / __|/ _ \ '__\ \ / / _ \ '__|
-  \__ \  __/ |   \ V /  __/ |
-  |___/\___|_|    \_/ \___|_|
+   Linux Version 5.4.0-4-amd64, Compiled #1 SMP Debian 5.4.19-1 (2020-02-13)
+One 2.29GHz Intel Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz Processor, 2GB RAM, 4589.21 Bogomips Total
+                                     server
 
 
-  Debian GNU/Linux 8.4 (jessie) (kernel 3.16.0-4-amd64)
+  System information as of Thu Apr  9 20:03:57 2020
 
-
-  System information as of Fri Apr 22 10:02:57 2016
-
-  System load:  2.74                 Processes:           167
-  Memory usage: 98%                  Users logged in:     1
-  Swap usage:   31%
+  System load:  0.05                 Processes:           90
+  Memory usage: 62%                  Users logged in:     1
+  Swap usage:   ---
   Disk Usage:
-    Usage of /                       : 37.0% of 19.18GB
-    Usage of /boot                   : 36.6% of 0.11GB
-    Usage of /home                   : 11.1% of 501.60GB
-  Inode Usage:
-    Usage of /                       : 12.7% of 1286144
-    Usage of /boot                   : 1.1% of 31232
-    Usage of /home                   : 0.1% of 33406976
+    Usage of /                       : 65.7% of 24.58GB    
+    Usage of /snap/amass/774         : 100.0% of 0.01GB    
+    Usage of /snap/amass/776         : 100.0% of 0.01GB    
+    Usage of /snap/core/8689         : 100.0% of 0.09GB    
+    Usage of /snap/core/8935         : 100.0% of 0.09GB    
 
   Logged in users:
-  user       from laptop.example.org        at Fri Apr 22 09:09:09 2016
+  user       from laptop.example.org          at Thu Apr  9 18:41:23 2020
+
+0 updates to install.
+0 are security updates.
+
 
 No mail.
-Last login: Fri Apr 22 09:23:01 2016 from laptop.example.org
+Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 ```
 
-**Warning** This Debian and Debian-related distributions only.
+**Warning:** This is designed for Debian and Debian-related distributions only.
 
 ## Dependencies
 
 You need to install some packages:
 
 ```
-apt-get install figlet lsb-release python-utmp bc
+sudo apt-get install figlet lsb-release python3-utmp bc needrestart
 ```
 
-Optionnally, you can install `needrestart` which is used to show a message if your server need a reboot (main reason (and the only one I know): you have upgraded your kernel).
-If you don't install `needrestart`, it will work, but you won't be warned about the need for a reboot.
-`needrestart` warns you about services that need to be restarted too (but is slower than `checkrestart` for that, see below).
-
-You can optionnally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. Relying on `needrestart` for that is slow (±7 seconds) while `checkrestart` do it faster (less than one second).
+You can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
 
 ## Installation
 
 ```
 cp -r update-motd.d/ /etc
-rm /etc/motd
+chmod 755 /etc/update-motd.d/
+chmod 644 /etc/update-motd.d/colors /etc/update-motd.d/sysinfo.py
+mv /etc/motd /etc/motd.bak
 ln -s /var/run/motd /etc/motd
 ```
 
-## Salt
+## Changes
 
-You will find a working salt formula in `init.sls`.
+This repo was forked from https://github.com/ldidry/dynamic-motd. Abiding by the conditions of the GPLv2 License, below is a list of all the **major** changes made to the original code/project:
 
-```
-cd /srv/salt
-git clone https://framagit.org/luc/dynamic-motd.git motd
-salt your_server state.sls motd
-```
+* Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
+* All scripts using python3 have been upgraded to python3.
+* Almost all the files have been renamed and/or modified.
 
 ## License
 
@@ -76,6 +89,6 @@ GPLv2. Have a look at the [LICENSE file](LICENSE).
 
 ## Acknowledments
 
-- Dustin Kirkland, the guy behind the Ubuntu dynamic motd (I took some scripts from Ubuntu and stole inspiration too :D)
-- https://github.com/maxis1718/update-motd.d for the skeleton
-- https://github.com/jnweiger/landscape-sysinfo-mini for the python script (slightly modified)
+* Dustin Kirkland, the guy behind the Ubuntu dynamic motd
+  * https://github.com/nickcharlton/dynamic-motd/ for some of the files used or modified
+* https://github.com/ldidry/dynamic-motd (forked from this repo)

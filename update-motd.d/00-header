@@ -1,9 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 #
 #    00-header - create the header of the MOTD
-#    Copyright (C) 2009-2010 Canonical Ltd.
+#    Copyright (c) 2013 Nick Charlton
+#    Copyright (c) 2009-2010 Canonical Ltd.
 #
-#    Authors: Dustin Kirkland <kirkland@canonical.com>
+#    Authors: Nick Charlton <hello@nickcharlton.net>
+#             Dustin Kirkland <kirkland@canonical.com>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,24 +20,31 @@
 #    You should have received a copy of the GNU General Public License along
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#    Modified by Hunter T. in 2020
+#    Get the original version at: https://github.com/nickcharlton/dynamic-motd/blob/master/00-header 
 
-# Modified by Luc Didry in 2016
 
-. /etc/update-motd.d/colors
+#
+# Option 1
+#
 
-[ -r /etc/update-motd.d/lsb-release ] && . /etc/update-motd.d/lsb-release
+#[ -r /etc/lsb-release ] && . /etc/lsb-release
 
-if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+#if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
     # Fall back to using the very slow lsb_release utility
-    DISTRIB_DESCRIPTION=$(lsb_release -s -d)
-fi
+    #DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+#fi
 
-re='(.*\()(.*)(\).*)'
-if [[ $DISTRIB_DESCRIPTION =~ $re ]]; then
-    DISTRIB_DESCRIPTION=$(printf "%s%s%s%s%s" "${BASH_REMATCH[1]}" "${YELLOW}" "${BASH_REMATCH[2]}" "${NONE}" "${BASH_REMATCH[3]}")
-fi
+#figlet $(hostname)
+#printf "\n"
+ 
+#printf "Welcome to %s (%s).\n" "$DISTRIB_DESCRIPTION" "$(uname -r)"
+#printf "\n"
 
-echo -e "  "$DISTRIB_DESCRIPTION "(kernel "$(uname -r)")\n"
 
-# Update the information for next time
-printf "DISTRIB_DESCRIPTION=\"%s\"" "$(lsb_release -s -d)" > /etc/update-motd.d/lsb-release &
+#
+# Option 2
+#
+
+linuxlogo
