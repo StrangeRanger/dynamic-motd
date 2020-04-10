@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # landscape-sysinfo-mini.py -- a trivial re-implementation of the 
 # sysinfo printout shown on debian at boot time. No twisted, no reactor, just /proc & utmp
@@ -14,12 +14,13 @@
 # 2014-10-13 V1.2 jw, survive without network
 
 # Modified by Luc Didry in 2016
+# Modified by Hunter Thompson in 2020
 # Get the original version at https://github.com/jnweiger/landscape-sysinfo-mini
 
 import sys,os,time,posix,glob,utmp
 from UTMPCONST import *
 
-_version_ = '1.2'
+_version_ = '2.0'
 
 def utmp_count():
   u = utmp.UtmpRecord()
@@ -47,21 +48,9 @@ def proc_mount():
       items[a[1]] = "%.1f%% of %.2fGB" % (perc, gb)
   return items
 
-def inode_proc_mount():
-  items = {}
-  for m in open('/proc/mounts').readlines():
-    a = m.split()
-    if a[0].find('/dev/') is 0:
-      statfs = os.statvfs(a[1])
-      perc = 100-100.*statfs.f_ffree/statfs.f_files
-      iTotal = statfs.f_files
-      items[a[1]] = "%.1f%% of %.2d" % (perc, iTotal)
-  return items
-
 loadav = float(open("/proc/loadavg").read().split()[1])
 processes = len(glob.glob('/proc/[0-9]*'))
 statfs = proc_mount()
-iStatfs = inode_proc_mount()
 users = utmp_count()
 meminfo = proc_meminfo()
 memperc = "%d%%" % (100-100.*meminfo['MemAvailable:']/(meminfo['MemTotal:'] or 1))
@@ -69,28 +58,24 @@ swapperc = "%d%%" % (100-100.*meminfo['SwapFree:']/(meminfo['SwapTotal:'] or 1))
 
 if meminfo['SwapTotal:'] == 0: swapperc = '---'
 
-print "  System information as of %s\n" % time.asctime()
-print "  System load:  %-5.2f                Processes:           %d" % (loadav, processes)
-print "  Memory usage: %-4s                 Users logged in:     %d" % (memperc, users)
-print "  Swap usage:   %s" % (swapperc)
+print("  System information as of %s\n" % time.asctime())
+print("  System load:  %-5.2f                Processes:           %d" % (loadav, processes))
+print("  Memory usage: %-4s                 Users logged in:     %d" % (memperc, users))
+print("  Swap usage:   %s" % (swapperc))
 
-print "  Disk Usage:"
+print("  Disk Usage:")
 for k in sorted(statfs.keys()):
-  print "    Usage of %-24s: %-20s" % (k, statfs[k])
-
-print "  Inode Usage:"
-for l in sorted(iStatfs.keys()):
-  print "    Usage of %-24s: %-20s" % (l, iStatfs[l])
+  print("    Usage of %-24s: %-20s" % (k, statfs[k]))
 
 if users > 0:
     a = utmp.UtmpRecord()
 
-    print "\n  Logged in users:"
+    print("\n  Logged in users:")
 
     for b in a: # example of using an iterator
         if b.ut_type == USER_PROCESS:
-            print "  \033[1;31m%-10s\033[m from %-25s at %-20s" % \
-            (b.ut_user, b.ut_host, time.ctime(b.ut_tv[0]))
+            print("  \033[1;31m%-10s\033[m from %-25s at %-20s" % \
+            (b.ut_user, b.ut_host, time.ctime(b.ut_tv[0])))
     a.endutent()
 
 sys.exit(0)
