@@ -1,7 +1,8 @@
 # Dynamic motd
+
 [![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 
-The aim of this project is to give some informations when you log into a server through SSH.
+The aim of this project is to give users useful information on the system, when logging into a server via SSH.
 
 Example:
 
@@ -52,7 +53,7 @@ No mail.
 Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 ```
 
-**Warning** This Debian and Debian-related distributions only.
+**Warning:** This is designed for Debian and Debian-related distributions only.
 
 ## Dependencies
 
@@ -62,7 +63,7 @@ You need to install some packages:
 sudo apt-get install figlet lsb-release python3-utmp bc needrestart
 ```
 
-You can optionnally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` does the same thing, some people prefer the way `checkrestart` works.
+You can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
 
 ## Installation
 
@@ -73,6 +74,14 @@ chmod 644 /etc/update-motd.d/colors /etc/update-motd.d/sysinfo.py
 mv /etc/motd /etc/motd.bak
 ln -s /var/run/motd /etc/motd
 ```
+
+## Changes
+
+This repo was forked from https://github.com/ldidry/dynamic-motd. Abiding by the conditions of the GPLv2 License, below is a list of all the **major** changes made to the original code/project:
+
+* Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
+* All scripts using python3 have been upgraded to python3.
+* Almost all the files have been renamed and/or modified.
 
 ## License
 
