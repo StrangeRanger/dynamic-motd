@@ -12,6 +12,7 @@
 # 2014-09-07 V1.0 jw, ad hoc writeup, feature-complete. Probably buggy?
 # 2014-10-08 V1.1 jw, survive without swap
 # 2014-10-13 V1.2 jw, survive without network
+# 2020-04-10 V1.3 ht, converted code from python2 to python3
 
 # Modified by Luc Didry in 2016
 # Modified by Hunter T. in 2020
@@ -20,7 +21,7 @@
 import sys,os,time,posix,glob,utmp
 from UTMPCONST import *
 
-_version_ = '2.0'
+_version_ = '1.3'
 
 def utmp_count():
   u = utmp.UtmpRecord()
