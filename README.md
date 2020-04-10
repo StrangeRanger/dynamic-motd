@@ -1,4 +1,5 @@
 # Dynamic motd
+[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 
 The aim of this project is to give some informations when you log into a server through SSH.
 
@@ -79,7 +80,6 @@ GPLv2. Have a look at the [LICENSE file](LICENSE).
 
 ## Acknowledments
 
-* Dustin Kirkland, the guy behind the Ubuntu dynamic motd (I took some scripts from Ubuntu and stole inspiration too :D)
-* https://github.com/maxis1718/update-motd.d for the skeleton
-* https://github.com/jnweiger/landscape-sysinfo-mini for the python script (slightly modified)
+* Dustin Kirkland, the guy behind the Ubuntu dynamic motd
+  * https://github.com/nickcharlton/dynamic-motd/ for some of the files used or modified
 * https://github.com/ldidry/dynamic-motd (forked from this repo)
