@@ -14,7 +14,7 @@
 # 2014-10-13 V1.2 jw, survive without network
 
 # Modified by Luc Didry in 2016
-# Modified by Hunter Thompson in 2020
+# Modified by Hunter T. in 2020
 # Get the original version at https://github.com/jnweiger/landscape-sysinfo-mini
 
 import sys,os,time,posix,glob,utmp
