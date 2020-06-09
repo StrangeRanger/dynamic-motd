@@ -1,7 +1,5 @@
 # Dynamic motd
 
-[![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
-
 The aim of this project is to give users useful information on the system, when logging into a server via SSH.
 
 Example:
