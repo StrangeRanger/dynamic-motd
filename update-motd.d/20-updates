@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 #   20-updates - create the system updates section of the MOTD
 #   Copyright (c) 2013 Nick Charlton
@@ -23,26 +23,27 @@
 #   Modified by Hunter T. in 2020
 #   Get the original version at: https://github.com/nickcharlton/dynamic-motd/blob/master/20-updates
 
+from __future__ import absolute_import
 import sys
 import subprocess
 import apt_pkg
 
-DISTRO = subprocess.Popen(["lsb_release", "-c", "-s"],
+DISTRO = subprocess.Popen([u"lsb_release", u"-c", u"-s"],
                           stdout=subprocess.PIPE).communicate()[0].strip()
 
 class OpNullProgress(object):
-    '''apt progress handler which supresses any output.'''
+    u'''apt progress handler which supresses any output.'''
     def update(self):
         pass
     def done(self):
         pass
 
 def is_security_upgrade(pkg):
-    '''
+    u'''
     Checks to see if a package comes from a DISTRO-security source.
     '''
-    security_package_sources = [("Ubuntu", "%s-security" % DISTRO),
-                               ("Debian", "%s-security" % DISTRO)]
+    security_package_sources = [(u"Ubuntu", u"%s-security" % DISTRO),
+                               (u"Debian", u"%s-security" % DISTRO)]
 
     for (file, index) in pkg.file_list:
         for origin, archive in security_package_sources:
@@ -56,8 +57,8 @@ apt_pkg.init()
 # open the apt cache
 try:
     cache = apt_pkg.Cache(OpNullProgress())
-except SystemError as e:
-    sys.stderr.write("Error: Opening the cache (%s)" % e)
+except SystemError, e:
+    sys.stderr.write(u"Error: Opening the cache (%s)" % e)
     sys.exit(-1)
 
 # setup a DepCache instance to interact with the repo
@@ -71,7 +72,7 @@ depcache.init()
 
 # give up if packages are broken
 if depcache.broken_count > 0:
-    sys.stderr.write("Error: Broken packages exist.")
+    sys.stderr.write(u"Error: Broken packages exist.")
     sys.exit(-1)
 
 # mark possible packages
@@ -84,8 +85,8 @@ try:
 
     # then a standard upgrade
     depcache.upgrade()
-except SystemError as e:
-    sys.stderr.write("Error: Couldn't mark the upgrade (%s)" % e)
+except SystemError, e:
+    sys.stderr.write(u"Error: Couldn't mark the upgrade (%s)" % e)
     sys.exit(-1)
 
 # run around the packages
@@ -114,6 +115,6 @@ for pkg in cache.packages:
             security_upgrades += 1
             break
 
-print("%d updates to install." % upgrades)
-print("%d are security updates." % security_upgrades)
-print("")
+print (u"%d updates to install." % upgrades)
+print (u"%d are security updates." % security_upgrades)
+print u""

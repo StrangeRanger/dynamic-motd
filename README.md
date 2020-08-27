@@ -23,7 +23,7 @@ Example:
          `"Y$b._         :#:._,###  ##:__,##  ##:__,##' ,##. ##.__:##. ##     ##
              `""""       `:#### ###  ######'  `######'  #### `#####"## ##     ##
 
-                         Debian GNU/Linux bullseye/sid
+                          Debian GNU/Linux 10 (buster)
                        Kernel Version 5.7.0-2-cloud-amd64
                                Uptime 50 minutes
 
@@ -51,14 +51,14 @@ No mail.
 Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 ```
 
-**Warning:** This is designed for Debian (bullseye and later) and Debian-related distributions only.
+**Warning:** This is designed for Debian and Debian-related distributions only.
 
 ## Dependencies
 
 You need to install some packages:
 
 ```
-sudo apt-get install figlet lsb-release python3-utmp bc needrestart linuxlogo python3-apt
+sudo apt-get install figlet lsb-release python-utmp bc needrestart linuxlogo python-apt
 ```
 
 iYou can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
@@ -78,7 +78,6 @@ ln -s /var/run/motd /etc/motd
 This repo was forked from https://github.com/ldidry/dynamic-motd. Abiding by the conditions of the GPLv2 License, below is a list of all the **major** changes made to the original code/project:
 
 * Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
-* All scripts using python3 have been upgraded to python3.
 * Almost all the files have been renamed and/or modified.
 
 ## License
