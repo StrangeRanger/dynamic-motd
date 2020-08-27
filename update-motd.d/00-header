@@ -46,5 +46,6 @@
 #
 # Option 2
 #
+. /etc/os-release
 
-linuxlogo
+linuxlogo -f -F "$PRETTY_NAME\nKernel Version #V\n#U"

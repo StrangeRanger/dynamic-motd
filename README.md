@@ -23,9 +23,9 @@ Example:
          `"Y$b._         :#:._,###  ##:__,##  ##:__,##' ,##. ##.__:##. ##     ##
              `""""       `:#### ###  ######'  `######'  #### `#####"## ##     ##
 
-   Linux Version 5.4.0-4-amd64, Compiled #1 SMP Debian 5.4.19-1 (2020-02-13)
-One 2.29GHz Intel Intel(R) Xeon(R) Gold 6140 CPU @ 2.30GHz Processor, 2GB RAM, 4589.21 Bogomips Total
-                                     server
+                         Debian GNU/Linux bullseye/sid
+                       Kernel Version 5.7.0-2-cloud-amd64
+                               Uptime 50 minutes
 
 
   System information as of Thu Apr  9 20:03:57 2020
@@ -51,17 +51,17 @@ No mail.
 Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 ```
 
-**Warning:** This is designed for Debian and Debian-related distributions only.
+**Warning:** This is designed for Debian (bullseye and later) and Debian-related distributions only.
 
 ## Dependencies
 
 You need to install some packages:
 
 ```
-sudo apt-get install figlet lsb-release python3-utmp bc needrestart
+sudo apt-get install figlet lsb-release python3-utmp bc needrestart linuxlogo python3-apt
 ```
 
-You can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
+iYou can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
 
 ## Installation
 
