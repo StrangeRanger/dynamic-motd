@@ -78,7 +78,7 @@ ln -s /var/run/motd /etc/motd
 This repo was forked from https://github.com/ldidry/dynamic-motd. Abiding by the conditions of the GPLv2 License, below is a list of all the **major** changes made to the original code/project:
 
 * Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
-* All scripts using python3 have been upgraded to python3.
+* All scripts using python2 have been upgraded to python3.
 * Almost all the files have been renamed and/or modified.
 
 ## License
