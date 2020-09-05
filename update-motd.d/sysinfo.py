@@ -42,7 +42,7 @@ def proc_mount():
   items = {}
   for m in open('/proc/mounts').readlines():
     a = m.split()
-    if a[0].find('/dev/') is 0:
+    if a[0].find('/dev/') == 0:
       statfs = os.statvfs(a[1])
       perc = 100-100.*statfs.f_bavail/statfs.f_blocks
       gb = statfs.f_bsize*statfs.f_blocks/1024./1024/1024
