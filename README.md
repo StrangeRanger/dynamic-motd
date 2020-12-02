@@ -51,7 +51,7 @@ No mail.
 Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 ```
 
-**Warning:** This is designed for Debian (11 and later) ~~and Debian-related distributions~~ only. For Debian 10 and below, and Ubuntu 18.04 and below, please visit the [old branch](https://github.com/StrangeRanger/dynamic-motd/tree/old).
+**Warning:** This is designed for Debian (11 and later), Ubuntu (20.04 and later), and other Debian-related distributions only. For Debian 10 and below, and Ubuntu 18.04 and below, please visit the [old branch](https://github.com/StrangeRanger/dynamic-motd/tree/old).
 
 ## Dependencies
 
