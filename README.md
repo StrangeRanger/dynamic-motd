@@ -66,11 +66,12 @@ iYou can optionally install `debian-goodies` which provides `checkrestart`, whic
 ## Installation
 
 ```
-cp -r update-motd.d/ /etc
-chmod 755 /etc/update-motd.d/
-chmod 644 /etc/update-motd.d/colors /etc/update-motd.d/sysinfo.py
-mv /etc/motd /etc/motd.bak
-ln -s /var/run/motd /etc/motd
+sudo rm -rf /etc/update-motd.d/
+sudo cp -r update-motd.d/ /etc
+sudo chmod 755 /etc/update-motd.d/
+sudo chmod 644 /etc/update-motd.d/colors /etc/update-motd.d/sysinfo.py
+sudo mv /etc/motd /etc/motd.bak
+sudo ln -s /var/run/motd /etc/motd
 ```
 
 ## Changes
