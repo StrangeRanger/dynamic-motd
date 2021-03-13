@@ -1,82 +1,266 @@
 #!/usr/bin/python3
+
+########################################################################################
 #
-# landscape-sysinfo-mini.py -- a trivial re-implementation of the 
-# sysinfo printout shown on debian at boot time. No twisted, no reactor, just /proc & utmp
 #
-# (C) 2014 jw@owncloud.com
 #
-# inspired by ubuntu 14.10 /etc/update-motd.d/50-landscape-sysinfo
-# Requires: python-utmp 
-# for counting users.
-#
-# 2014-09-07 V1.0 jw, ad hoc writeup, feature-complete. Probably buggy?
-# 2014-10-08 V1.1 jw, survive without swap
-# 2014-10-13 V1.2 jw, survive without network
-# 2020-04-10 V1.3 ht, converted code from python2 to python3
+########################################################################################
+####[ Imports ]#########################################################################
 
-# Modified by Luc Didry in 2016
-# Modified by Hunter T. in 2020
-# Get the original version at https://github.com/jnweiger/landscape-sysinfo-mini
 
-import sys,os,time,posix,glob,utmp
-from UTMPCONST import *
+from time import asctime
+from os import path
+from shutil import disk_usage
 
-_version_ = '1.3'
 
-def utmp_count():
-  u = utmp.UtmpRecord()
-  users = 0
-  for i in u:
-    if i.ut_type == utmp.USER_PROCESS: users += 1
-  return users
+####[ Functions ]#######################################################################
 
-def proc_meminfo():
-  items = {}
-  for l in open('/proc/meminfo').readlines():
-    a = l.split()
-    items[a[0]] = int(a[1])
-  # print items['MemTotal:'], items['MemFree:'], items['SwapTotal:'], items['SwapFree:']
-  return items
 
-def proc_mount():
-  items = {}
-  for m in open('/proc/mounts').readlines():
-    a = m.split()
-    if a[0].find('/dev/') == 0:
-      statfs = os.statvfs(a[1])
-      perc = 100-100.*statfs.f_bavail/statfs.f_blocks
-      gb = statfs.f_bsize*statfs.f_blocks/1024./1024/1024
-      items[a[1]] = "%.1f%% of %.2fGB" % (perc, gb)
-  return items
+def get_meminfo(convert_memory_size_to, decimal_conversion):
+    """"""
+    # TODO: Figure out how to do swap like I did memory
+    # The information to be retrieved
+    items = {
+        "MemTotal": [],
+        "MemFree": [],  # Temporary
+        "MemUsed": [],
+        "Buffers": [],  # Temporary
+        "Cached": [],  # Temporary
+        "SReclaimable": [],  # Temporary
+    }
+    items_keys = list(items.keys())
 
-loadav = float(open("/proc/loadavg").read().split()[1])
-processes = len(glob.glob('/proc/[0-9]*'))
-statfs = proc_mount()
-users = utmp_count()
-meminfo = proc_meminfo()
-memperc = "%d%%" % (100-100.*meminfo['MemAvailable:']/(meminfo['MemTotal:'] or 1))
-swapperc = "%d%%" % (100-100.*meminfo['SwapFree:']/(meminfo['SwapTotal:'] or 1))
+    # If the end user wants the data to be displayed using 1024 byte conversion,
+    # this if statement converts the......................
+    if not decimal_conversion:
+        mult = 0.9765625
+    else:
+        mult = 1.0
 
-if meminfo['SwapTotal:'] == 0: swapperc = '---'
+    # Retrieving information and adding it to the 'items' dict
+    for line in open("/proc/meminfo").readlines():
+        split_line = line.split()
+        if split_line[0].rstrip(":") in items_keys:
+            items[split_line[0].rstrip(":")].append(float(split_line[1]) * mult)
+            items[split_line[0].rstrip(":")].append("K")
 
-print("  System information as of %s\n" % time.asctime())
-print("  System load:  %-5.2f                Processes:           %d" % (loadav, processes))
-print("  Memory usage: %-4s                 Users logged in:     %d" % (memperc, users))
-print("  Swap usage:   %s" % (swapperc))
+    # Memory Used = (MemTotal - MemFree - Buffers - (Cached + KReclaimable))
+    # See more in `man 1 free`
+    items["MemUsed"].append(
+        int(
+            items["MemTotal"][0]
+            - items["MemFree"][0]
+            - items["Buffers"][0]
+            - (items["Cached"][0] + items["SReclaimable"][0])
+        )
+    )
+    items["MemUsed"].append("K")
 
-print("  Disk Usage:")
-for k in sorted(statfs.keys()):
-  print("    Usage of %-24s: %-20s" % (k, statfs[k]))
+    # Remove temporary keys
+    items.pop("MemFree")
+    items.pop("Buffers")
+    items.pop("Cached")
+    items.pop("SReclaimable")
 
-if users > 0:
-    a = utmp.UtmpRecord()
+    # Convert unit size of data (1000KB --> 1MB)
+    items["MemTotal"] = convert_size(
+        items["MemTotal"], convert_memory_size_to, decimal_conversion
+    )
+    items["MemUsed"] = convert_size(
+        items["MemUsed"], items["MemTotal"][1][0], decimal_conversion
+    )
 
-    print("\n  Logged in users:")
+    return items
 
-    for b in a: # example of using an iterator
-        if b.ut_type == USER_PROCESS:
-            print("  \033[1;31m%-10s\033[m from %-25s at %-20s" % \
-            (b.ut_user, b.ut_host, time.ctime(b.ut_tv[0])))
-    a.endutent()
 
-sys.exit(0)
+# TODO: Input the conversion stuff so that it's outcome is similar to the way I have
+#  it in get_meminfo
+def get_mount(convert_disk_size_to, decimal_conversion, disk_verbose):
+    """"""
+    items = {"/": {"total": [0, "B"], "used": [0, "B"]}}
+
+    # Retrieving information and adding it to the 'items' dict
+    if disk_verbose:
+        for line in open("/proc/mounts").readlines():
+            split_line = line.split()
+            if path.exists(split_line[0]):
+                items[split_line[1]] = {
+                    "total": [list(disk_usage(split_line[1]))[0], "B"],
+                    "used": [list(disk_usage(split_line[1]))[1], "B"],
+                }
+    else:
+        for line in open("/proc/mounts").readlines():
+            split_line = line.split()
+            if path.exists(split_line[0]):
+                items["/"] = {
+                    "total": [
+                        list(disk_usage(split_line[1]))[0] + items["/"]["total"][0],
+                        "B",
+                    ],
+                    "used": [
+                        list(disk_usage(split_line[1]))[1] + items["/"]["used"][0],
+                        "B",
+                    ],
+                }
+
+    # Convert unit size of data (1000KB --> 1MB)
+    for mount_location in items:
+        for form in items[mount_location]:
+            items[mount_location][form] = list(
+                convert_size(
+                    items[mount_location][form],
+                    convert_disk_size_to,
+                    decimal_conversion,
+                )
+            )
+
+    return items
+
+
+# TODO: Work on this/make it look and function better
+#  Try to get it to work with only one char instead of the whole string
+def convert_size(byte_amount, convert_to, decimal_conversion):
+    """"""
+    units = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"]
+
+    if decimal_conversion:
+        units_prefix = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+        byte_conv_size = 1000
+    else:
+        units_prefix = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
+        byte_conv_size = 1024
+
+    if convert_to is not None:
+        if convert_to != "B" and convert_to not in units:
+            raise ValueError("convert_size: Invalid convert_to '{}'".format(convert_to))
+
+    start = 0 if byte_amount[1] == "B" else units.index(byte_amount[1])
+    stop = int(len(units) - 1)
+
+    if convert_to is None:
+        for unit in range(start, stop):
+            if byte_amount[0] < byte_conv_size or units[unit] == "Y":
+                return [round(byte_amount[0], 2), units_prefix[unit]]
+            byte_amount[0] /= byte_conv_size
+    else:
+        for unit in range(start, stop):
+            if units[unit] == convert_to or units[unit] == convert_to:
+                return [round(byte_amount[0], 2), units_prefix[unit]]
+            byte_amount[0] /= byte_conv_size
+
+    raise Exception("convert_size: Couldn't return converted list")
+
+
+def main(
+    memory_percent,
+    disk_percent,
+    disk_verbose,
+    decimal_conversion,
+    convert_memory_size_to,
+    convert_disk_size_to,
+):
+    """"""
+    mem_info = get_meminfo(convert_memory_size_to, decimal_conversion)
+    """Contains all the memory based information."""
+    mount_info = get_mount(convert_disk_size_to, decimal_conversion, disk_verbose)
+    """Contains all the information regarding the size of all mounted _____."""
+    mount_keys = list(mount_info.keys())
+    mem_used = "{}{}".format(mem_info["MemUsed"][0], mem_info["MemTotal"][1])
+    """Combines the amount of used memory with the unit type (i.e. GB)."""
+    mem_total = "{}{}".format(mem_info["MemTotal"][0], mem_info["MemTotal"][1])
+    """Combines the amount of total memory with the unit type (i.e. GB)."""
+    mem_percent = "{}%".format(
+        round(
+            (mem_info["MemUsed"][0] / mem_info["MemTotal"][0]) * 100,
+            2,
+        )
+    )
+    """Calculates the percentage of memory used."""
+
+    print("  System information as of {}\n".format(asctime()))
+    # Prints out CPU usage and number of users logged into the server
+    print("  CPU usage:    {}Users logged in: {}".format(temp_var.ljust(31), temp_var))
+    # ....
+    if memory_percent:
+        print(
+            "  Memory Usage: {} / {} {}".format(
+                mem_used, mem_total, ("(" + str(mem_percent) + ")")
+            )
+        )
+    # ....
+    else:
+        print("  Memory Usage: {} / {}".format(mem_used, mem_total))
+    # ....
+    if disk_verbose:
+        print("  Disk Usage:")
+        for i in mount_keys:
+            print(
+                "    Usage of {}: {}{} / {}{}{}".format(
+                    mount_keys[mount_keys.index(i)].ljust(34),
+                    str(mount_info[i]["used"][0]).ljust(7),
+                    mount_info[i]["used"][1],
+                    str(mount_info[i]["total"][0]).ljust(7),
+                    mount_info[i]["total"][1],
+                    (
+                        " ("
+                        + str(
+                            round(
+                                (mount_info[i]["used"][0] / mount_info[i]["total"][0])
+                                * 100
+                            )
+                        )
+                        + "%)"
+                    )
+                    if disk_percent
+                    else "",
+                )
+            )
+    # ....
+    else:
+        print(
+            "  Disk Usage:   {}{} / {}{}{}".format(
+                str(mount_info["/"]["used"][0]),
+                mount_info["/"]["used"][1],
+                str(mount_info["/"]["total"][0]),
+                mount_info["/"]["total"][1],
+                (
+                    " ("
+                    + str(
+                        round(
+                            (
+                                mount_info["/"]["used"][0]
+                                / mount_info["/"]["total"][0]
+                                * 100
+                            ),
+                            2,
+                        )
+                    )
+                    + "%)"
+                    if disk_percent
+                    else ""
+                ),
+            )
+        )
+
+
+####[ Main ]############################################################################
+
+
+if __name__ == "__main__":
+    temp_var = "xxxxxx"
+    MEMORY_PERCENT = True
+    DISK_PERCENT = True
+    DISK_VERBOSE = False
+    DECIMAL_CONVERSION = True
+    CONVERT_MEMORY_SIZE_TO = None
+    CONVERT_DISK_SIZE_TO = None
+
+    main(
+        MEMORY_PERCENT,
+        DISK_PERCENT,
+        DISK_VERBOSE,
+        DECIMAL_CONVERSION,
+        CONVERT_MEMORY_SIZE_TO,
+        CONVERT_DISK_SIZE_TO,
+    )
+
