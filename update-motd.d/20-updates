@@ -1,54 +1,49 @@
 #!/usr/bin/python3
+
+###############################################################################
 #
-#   20-updates - create the system updates section of the MOTD
-#   Copyright (c) 2013 Nick Charlton
+# Slightly modified version of Nick Charlton's version of
+# '/etc/update-motd.d/20-updates'. The original version can be found here:
+# https://github.com/nickcharlton/dynamic-motd
 #
-#   Authors: Nick Charlton <hello@nickcharlton.net>
-#   Based upon prior work by Dustin Kirkland and Michael Vogt.
-#
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License along
-#   with this program; if not, write to the Free Software Foundation, Inc.,
-#   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-#
-#   Modified by Hunter T. in 2020
-#   Get the original version at: https://github.com/nickcharlton/dynamic-motd/blob/master/20-updates
+###############################################################################
 
 import sys
 import subprocess
 import apt_pkg
 
-DISTRO = subprocess.Popen(["lsb_release", "-c", "-s"],
-                          stdout=subprocess.PIPE).communicate()[0].strip()
+DISTRO = (
+    subprocess.Popen(["lsb_release", "-c", "-s"], stdout=subprocess.PIPE)
+    .communicate()[0]
+    .strip()
+)
+
 
 class OpNullProgress(object):
-    '''apt progress handler which supresses any output.'''
+    """apt progress handler which supresses any output."""
+
     def update(self):
         pass
+
     def done(self):
         pass
 
+
 def is_security_upgrade(pkg):
-    '''
+    """
     Checks to see if a package comes from a DISTRO-security source.
-    '''
-    security_package_sources = [("Ubuntu", "%s-security" % DISTRO),
-                               ("Debian", "%s-security" % DISTRO)]
+    """
+    security_package_sources = [
+        ("Ubuntu", "%s-security" % DISTRO),
+        ("Debian", "%s-security" % DISTRO),
+    ]
 
     for (file, index) in pkg.file_list:
         for origin, archive in security_package_sources:
-            if (file.archive == archive and file.origin == origin):
+            if file.archive == archive and file.origin == origin:
                 return True
     return False
+
 
 # init apt and config
 apt_pkg.init()
@@ -108,7 +103,7 @@ for pkg in cache.packages:
 
     # double check for security upgrades masked by another package
     for version in pkg.version_list:
-        if (current and apt_pkg.version_compare(version.ver_str, current.ver_str) <= 0):
+        if current and apt_pkg.version_compare(version.ver_str, current.ver_str) <= 0:
             continue
         if is_security_upgrade(version):
             security_upgrades += 1
