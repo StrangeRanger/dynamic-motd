@@ -1,20 +1,22 @@
 # Dynamic motd
 
+[![CodeFactor](https://www.codefactor.io/repository/github/strangeranger/dynamic-motd/badge)](https://www.codefactor.io/repository/github/strangeranger/dynamic-motd)
+
 The aim of this project is to give users useful information on the system, when logging into a server via SSH.
 
 Example:
 
 ```
-        _,met$$$$$gg.                                                           
-     ,g$$$$$$$$$$$$$$$P.                                                        
-   ,g$$P""       """Y$$.".                                                      
-  ,$$P'              `$$$.                                                      
-',$$P       ,ggs.     `$$b:                                                     
-`d$$'     ,$P"'   .    $$$                               ,#.                    
- $$P      d$'     ,    $$P      ##:          :##        :###:                   
- $$:      $$.   -    ,d$$'      ##'          `##         `#'                    
- $$;      Y$b._   _,d$P'    __  ##     __     ##  __      _     __          _   
- Y$$.    `.`"Y$$$$P"'     ,####:##  ,######.  ##.#####. :### ,######. ###.####: 
+        _,met$$$$$gg.
+     ,g$$$$$$$$$$$$$$$P.
+   ,g$$P""       """Y$$.".
+  ,$$P'              `$$$.
+',$$P       ,ggs.     `$$b:
+`d$$'     ,$P"'   .    $$$                               ,#.
+ $$P      d$'     ,    $$P      ##:          :##        :###:
+ $$:      $$.   -    ,d$$'      ##'          `##         `#'
+ $$;      Y$b._   _,d$P'    __  ##     __     ##  __      _     __          _
+ Y$$.    `.`"Y$$$$P"'     ,####:##  ,######.  ##.#####. :### ,######. ###.####:
  `$$b      "-.__         ,##' `###  ##:  :##  ###' `###  ##' #:   `## `###' `##:
   `Y$$b                  ##    `##  ##    ##  ##'   `##  ##    ___,##  ##:   `##
    `Y$$.                 ##     ##  #######:  ##     ##  ##  .#######  ##'    ##
@@ -34,11 +36,11 @@ Example:
   Memory usage: 62%                  Users logged in:     1
   Swap usage:   ---
   Disk Usage:
-    Usage of /                       : 65.7% of 24.58GB    
-    Usage of /snap/amass/774         : 100.0% of 0.01GB    
-    Usage of /snap/amass/776         : 100.0% of 0.01GB    
-    Usage of /snap/core/8689         : 100.0% of 0.09GB    
-    Usage of /snap/core/8935         : 100.0% of 0.09GB    
+    Usage of /                       : 65.7% of 24.58GB
+    Usage of /snap/amass/774         : 100.0% of 0.01GB
+    Usage of /snap/amass/776         : 100.0% of 0.01GB
+    Usage of /snap/core/8689         : 100.0% of 0.09GB
+    Usage of /snap/core/8935         : 100.0% of 0.09GB
 
   Logged in users:
   user       from laptop.example.org          at Thu Apr  9 18:41:23 2020
@@ -74,13 +76,17 @@ sudo mv /etc/motd /etc/motd.bak
 sudo ln -s /var/run/motd /etc/motd
 ```
 
+## Tested On
+
+......
+
 ## Changes
 
 This repo was forked from https://github.com/ldidry/dynamic-motd. Abiding by the conditions of the GPLv2 License, below is a list of all the **major** changes made to the original code/project:
 
-* Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
-* All scripts using python2 have been upgraded to python3.
-* Almost all the files have been renamed and/or modified.
+- Everything relating to salting (i.e., `init.sls`, etc.) as well as `00-figlet` have been removed.
+- All scripts using python2 have been upgraded to python3.
+- Every file has either been renamed, rewritten, or modified.
 
 ## License
 
@@ -88,6 +94,6 @@ GPLv2. Have a look at the [LICENSE file](LICENSE).
 
 ## Acknowledments
 
-* Dustin Kirkland, the guy behind the Ubuntu dynamic motd
-  * https://github.com/nickcharlton/dynamic-motd/ for some of the files used or modified
-* https://github.com/ldidry/dynamic-motd (forked from this repo)
+- Dustin Kirkland, the guy behind the Ubuntu dynamic motd
+  - https://github.com/nickcharlton/dynamic-motd/ for some of the files used or modified
+- https://github.com/ldidry/dynamic-motd (forked from this repo)
