@@ -160,22 +160,23 @@ def main(
     convert_disk_size_to,
 ):
     """"""
+    # Contains all the memory based information.
     mem_info = get_meminfo(convert_memory_size_to, decimal_conversion)
-    """Contains all the memory based information."""
+    # Contains all the information regarding the size of all mounted _____.
     mount_info = get_mount(convert_disk_size_to, decimal_conversion, disk_verbose)
-    """Contains all the information regarding the size of all mounted _____."""
+    # Combines the amount of used memory with the unit type (i.e. GB).
     mount_keys = list(mount_info.keys())
+    # Combines the amount of used memory with the unit type (i.e. GB)
     mem_used = "{}{}".format(mem_info["MemUsed"][0], mem_info["MemTotal"][1])
-    """Combines the amount of used memory with the unit type (i.e. GB)."""
+    # Combines the amount of total memory with the unit type (i.e. GB).
     mem_total = "{}{}".format(mem_info["MemTotal"][0], mem_info["MemTotal"][1])
-    """Combines the amount of total memory with the unit type (i.e. GB)."""
+    # Calculates the percentage of memory used.
     mem_percent = "{}%".format(
         round(
             (mem_info["MemUsed"][0] / mem_info["MemTotal"][0]) * 100,
             2,
         )
     )
-    """Calculates the percentage of memory used."""
 
     print("  System information as of {}\n".format(asctime()))
     # Prints out CPU usage and number of users logged into the server
