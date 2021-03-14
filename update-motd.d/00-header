@@ -1,33 +1,33 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Slightly modified version of Nick Charlton's and Dustin Kirkland's version of
 # '/etc/update-motd.d/00-header'. The original version can be found here:
 # https://github.com/nickcharlton/dynamic-motd
 #
-###############################################################################
+################################################################################
 
-_00_HEADER_OPTION=2
+header_option=2
 
-case $_00_HEADER_OPTION in
+case $header_option in
     0)
+        clear -x
         exit 0
         ;;
     1)
-        [ -r /etc/lsb-release ] && . /etc/lsb-release
-        if [ -z "$DISTRIB_DESCRIPTION" ] && [ -x /usr/bin/lsb_release ]; then
+        clear -x
+        [[ -r /etc/lsb-release ]] && . /etc/lsb-release
+        if [[ -z $DISTRIB_DESCRIPTION ]] && [[ -x /usr/bin/lsb_release ]]; then
             # Fall back to using the very slow lsb_release utility
             DISTRIB_DESCRIPTION=$(lsb_release -s -d)
         fi
         figlet $(hostname)
-        printf "\n"
-        printf "Welcome to %s (%s).\n" "$DISTRIB_DESCRIPTION" "$(uname -r)"
-        printf "\n"
+        echo ""
+        echo  -e "Welcome to $DISTRIB_DESCRIPTION ($(uname -r))\n"
         ;;
     2)
         . /etc/os-release
         linuxlogo -f -F "$PRETTY_NAME\nKernel Version #V\n#U"
         ;;
-
     *)
         printf "Invalid option provided for file '/etc/update-motd.d/00-header'"
         printf "\n"

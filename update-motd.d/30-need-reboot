@@ -1,13 +1,14 @@
 #!/bin/bash
 
-. /etc/update-motd.d/colors
+red=$'\033[1;31m'
+nc=$'\033[0m'
 
 if [[ -x /usr/sbin/needrestart ]]; then
     n=$(DEBIAN_FRONTEND=noninteractive echo "" | /usr/sbin/needrestart -k -v -n 2>/dev/null | grep -c "Pending kernel upgrade\!")
     if [[ $n -gt 0 ]]; then
-        printf $LIGHT_RED
+        printf $red
         printf "  Pending kernel upgrade! "
-        printf $NONE
+        printf $nc
         printf "You should consider rebooting your machine.\n\n"
     fi
 fi
