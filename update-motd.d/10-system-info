@@ -9,7 +9,7 @@ cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
 threshold="${cores:-1}.0"                                                                             
 
 printf "\n"
-if [ $(echo "`cut -f1 -d ' ' /proc/loadavg` < $threshold" | bc) -eq 1 ]; then                         
+if [ $(echo "$(cut -f1 -d ' ' /proc/loadavg) < $threshold" | bc) -eq 1 ]; then    
     python3 /etc/update-motd.d/sysinfo.py
 else                                                                                                  
     echo " System information disabled due to load higher than $threshold"                            
