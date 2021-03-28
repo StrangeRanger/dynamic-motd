@@ -55,7 +55,9 @@ Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
 
 **Warning:** This is designed for Debian (11 and later), Ubuntu (20.04 and later), and other Debian-related distributions only. For Debian 10 and below, and Ubuntu 18.04 and below, please visit the [old branch](https://github.com/StrangeRanger/dynamic-motd/tree/old).
 
-## Dependencies
+## Getting Started
+
+### Prerequisites
 
 You need to install some packages:
 
@@ -65,7 +67,7 @@ sudo apt-get install figlet lsb-release python3-utmp bc needrestart linuxlogo py
 
 iYou can optionally install `debian-goodies` which provides `checkrestart`, which will be used to warn you about services that need to be restarted. While `needrestart` already does this, many people prefer the way `checkrestart` works/looks.
 
-## Installation
+### Installation
 
 ```
 sudo rm -rf /etc/update-motd.d/
