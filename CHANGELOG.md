@@ -6,15 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-### Added
-
-- Options for the behavior `update-motd.d/00-header` have been added.
-
-### Changed
-
-- Completely rewrote `update-motd.d/sysinfo.py`.
-- Updated syntax of all the bash and python files.
-
 ## [1.0.2] - 2020-12-01
 
 ### Added
