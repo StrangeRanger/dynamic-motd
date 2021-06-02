@@ -9,51 +9,36 @@ The aim of this project is to give users useful information on the system, when 
 
 Example:
 
-```
-        _,met$$$$$gg.
-     ,g$$$$$$$$$$$$$$$P.
-   ,g$$P""       """Y$$.".
-  ,$$P'              `$$$.
-',$$P       ,ggs.     `$$b:
-`d$$'     ,$P"'   .    $$$                               ,#.
- $$P      d$'     ,    $$P      ##:          :##        :###:
- $$:      $$.   -    ,d$$'      ##'          `##         `#'
- $$;      Y$b._   _,d$P'    __  ##     __     ##  __      _     __          _
- Y$$.    `.`"Y$$$$P"'     ,####:##  ,######.  ##.#####. :### ,######. ###.####:
- `$$b      "-.__         ,##' `###  ##:  :##  ###' `###  ##' #:   `## `###' `##:
-  `Y$$b                  ##    `##  ##    ##  ##'   `##  ##    ___,##  ##:   `##
-   `Y$$.                 ##     ##  #######:  ##     ##  ##  .#######  ##'    ##
-     `$$b.               ##     ##  ##'       ##     ##  ##  ##'  `##  ##     ##
-       `Y$$b.            ##.   ,##  ##        ##    ,##  ##  ##    ##  ##     ##
-         `"Y$b._         :#:._,###  ##:__,##  ##:__,##' ,##. ##.__:##. ##     ##
-             `""""       `:#### ###  ######'  `######'  #### `#####"## ##     ##
-
-                         Debian GNU/Linux bullseye/sid
-                       Kernel Version 5.7.0-2-cloud-amd64
-                               Uptime 50 minutes
+``` txt
+               .-. 
+        .-'``(|||) 
+     ,`\ \    `-`.                 88                         88 
+    /   \ '``-.   `                88                         88 
+  .-.  ,       `___:      88   88  88,888,  88   88  ,88888, 88888  88   88 
+ (:::) :        ___       88   88  88   88  88   88  88   88  88    88   88 
+  `-`  `       ,   :      88   88  88   88  88   88  88   88  88    88   88 
+    \   / ,..-`   ,       88   88  88   88  88   88  88   88  88    88   88 
+     `./ /    .-.`        '88888'  '88888'  '88888'  88   88  '8888 '88888' 
+        `-..-(   ) 
+              `-` 
 
 
-  System information as of Thu Apr  9 20:03:57 2020
+                               Ubuntu 20.04.2 LTS
+                        Kernel Version 5.4.0-73-generic
+                        Uptime 9 days 8 hours 56 minutes
 
-  System load:  0.05                 Processes:           90
-  Memory usage: 62%                  Users logged in:     1
-  Swap usage:   ---
-  Disk Usage:
-    Usage of /                       : 65.7% of 24.58GB
-    Usage of /snap/amass/774         : 100.0% of 0.01GB
-    Usage of /snap/amass/776         : 100.0% of 0.01GB
-    Usage of /snap/core/8689         : 100.0% of 0.09GB
-    Usage of /snap/core/8935         : 100.0% of 0.09GB
 
-  Logged in users:
-  user       from laptop.example.org          at Thu Apr  9 18:41:23 2020
+  System information as of Tue Jun  1 17:57:33 2021
 
-0 updates to install.
+  CPU usage:    xxxxxx                         Users logged in: xxxxxx
+  Memory Usage: 1.16GiB / 1.9GiB (61.05%)
+  Disk Usage:   29.57GiB / 48.85GiB (60.53%)
+
+9 updates to install.
 0 are security updates.
 
 
-No mail.
-Last login: Thu Apr  9 18:41:23 2020 from laptop.example.org
+Last login: Tue Jun  1 09:56:43 2021 from laptop.example.org
 ```
 
 **Warning:** This is designed for Debian (11 and later), Ubuntu (20.04 and later), and other Debian-related distributions only. For Debian 10 and below, and Ubuntu 18.04 and below, please visit the [old branch](https://github.com/StrangeRanger/dynamic-motd/tree/old).
